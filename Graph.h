@@ -4,6 +4,17 @@
 #include <iostream>
 #include <map>
 #include <utility>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <map>
+#include <vector>
+#include <iterator>
+#include <functional>
+#include <queue>
+#include<unordered_set>
+#include <algorithm>
 
 template<typename tVertex, typename tDistance = double>
 
@@ -86,12 +97,15 @@ class Graph
 
 
 	//поиск кратчайшего пути
-	std::vector<Edge<Vertex, Distance>> shortest_path(const Vertex& from,
+	std::vector<Edge<Vertex, Distance>> shortestPath(const Vertex& from,
 		const Vertex& to) const;
 
 	//обход
 	void walk(const Vertex& start, std::function<void(const Vertex&)> action);
 	friend std::ostream& operator<<(std::ostream& out, Graph<Vertex> graph);
+
+	//задача
+	Vertex findOptimal();
 };
 
 #endif //LAB3_CPP_4SEM__GRAPH_H_

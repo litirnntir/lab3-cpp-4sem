@@ -174,3 +174,92 @@ size_t Graph<Vertex, Distance>::order() const
 {
 	return mapV.size();
 }
+
+template<typename Vertex, typename Distance>
+std::vector<Edge<Vertex, Distance>> Graph<Vertex, Distance>::shortestPath(const Vertex& from, const Vertex& to) const
+{
+	std::map<Vertex, Distance> distances;
+	std::map<Vertex, Vertex> prev;
+	for (auto i : vertices())
+	{
+		distances[i] = INT_MAX;
+	}
+	std::queue<std::pair<Distance, Vertex>> pq;
+	distances[from] = 0;
+	pq.push({ 0, from });
+	while (!pq.empty())
+	{
+		Distance dist = pq.front().first;
+		Vertex vertex = pq.front().second;
+		pq.pop();
+		if (dist > distances[vertex])
+		{
+			continue;
+		}
+		for (auto i : edges(vertex))
+		{
+			double newD;
+			newD = dist + i.dist;
+			if (newD < distances[i.to])
+			{
+				distances[i.to] = newD;
+				prev[i.to] = vertex;
+				pq.push(make_pair(newD, i.to));
+			}
+		}
+	}
+	std::vector<Vertex> path;
+	Vertex current = to;
+	while (current != from)
+	{
+		path.push_back(current);
+		current = prev[current];
+	}
+	path.push_back(from);
+	std::reverse(path.begin(), path.end());
+	return path;
+}
+template<typename Vertex, typename Distance>
+Vertex Graph<Vertex, Distance>::findOptimal()
+{
+	std::map<Vertex, Distance> mapOfDistance;
+	for (auto it1 = mapV.begin(); it1 != mapV.end(); it1++)
+	{
+		int infCount = 0;
+		int okCount = mapV.size() / 4;
+		Distance sum = 0;
+		for (auto it2 = mapV.begin(); it2 != mapV.end(); it2++)
+		{
+			if (it1 == it2)
+			{
+				continue;
+			}
+			std::vector<Edge<Vertex, Distance>> tmp = shortestPath(it1->first, it2->first);
+			if (tmp.size() == 0)
+			{
+				mapOfDistance[it1->first] = std::numeric_limits<Distance>::max();
+				break;
+			}
+			for (auto i : tmp)
+			{
+				sum += i.dist;
+			}
+		}
+		if (mapOfDistance[it1->first] != std::numeric_limits<Distance>::max())
+		{
+			mapOfDistance[it1->first] = sum;
+		}
+	}
+	Vertex vertexWithMinDist;
+	Distance minDist = std::numeric_limits<Distance>::max();
+	for (auto it = mapOfDistance.begin(); it != mapOfDistance.end(); it++)
+	{
+		Distance dist = it->second;
+		if (dist < minDist)
+		{
+			minDist = dist;
+			vertexWithMinDist = it->first;
+		}
+	}
+	return vertexWithMinDist;
+}
