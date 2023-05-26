@@ -122,7 +122,6 @@ bool Graph<Vertex, Distance>::hasEdge(const Vertex& from, const Vertex& to) cons
 	}
 	return false;
 }
-
 template<typename Vertex, typename Distance>
 bool Graph<Vertex, Distance>::hasEdge(const Graph::Edge<Vertex, Distance>& edge)
 {
@@ -130,7 +129,7 @@ bool Graph<Vertex, Distance>::hasEdge(const Graph::Edge<Vertex, Distance>& edge)
 	{
 		if (mapV[edge.from].find(edge.to) != mapV[edge.from].end())
 		{
-			if (mapV[edge.from][edge.to].dist == edge.dist)
+			if (mapV[edge.from][edge.to].distance == edge.distance)
 			{
 				return true;
 			}
