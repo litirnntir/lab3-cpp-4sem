@@ -3,18 +3,9 @@
 
 #include <iostream>
 #include <map>
-#include <utility>
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <locale.h>
 #include <map>
 #include <vector>
-#include <iterator>
-#include <functional>
 #include <queue>
-#include<unordered_set>
-#include <algorithm>
 
 template<typename tVertex, typename tDistance = double>
 
