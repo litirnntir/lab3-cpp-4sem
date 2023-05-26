@@ -84,8 +84,12 @@ class Graph
 	//поиск кратчайшего пути
 	std::vector<Edge> shortest_path(const Vertex& from,
 		const Vertex& to) const;
+
+	// Для обхода
+	std::map<Vertex, std::map<int,Edge<Vertex>>> mapV;
+	std::map<Vertex, bool>visited;
 	//обход
-	std::vector<Vertex> walk(const Vertex& start_vertex) const;
+	void walk(const Vertex& start, std::function<void(const Vertex&)> action);
 };
 
 #endif //LAB3_CPP_4SEM__GRAPH_H_
