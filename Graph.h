@@ -60,14 +60,13 @@ class Graph
 		}
 	};
 
-	// Для обхода
-	std::map<Vertex, std::map<int,Edge<Vertex>>> mapV;
+	std::map<Vertex, std::map<Vertex, Edge<Vertex, Distance>>> mapV;
 	std::map<Vertex, bool>visited;
 
 	//проверка-добавление-удаление вершин
-	bool has_vertex(const Vertex& v) const;
-	void add_vertex(const Vertex& v);
-	bool remove_vertex(const Vertex& v);
+	bool HasVertex(const Vertex& vertex) const;
+	bool AddVertex(const Vertex& v);
+	bool removeVertex(const Vertex& v);
 	std::vector<Vertex> vertices() const;
 
 	//проверка-добавление-удаление ребер

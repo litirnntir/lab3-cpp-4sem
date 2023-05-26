@@ -5,9 +5,11 @@ void Graph<Vertex, Distance>::walk(const Vertex& start, std::function<void(const
 {
 	visited[start] = true;
 	action(start);
-	for (auto it1 : edges(start)) {
+	for (auto it1 : edges(start))
+	{
 		Vertex next_node = it1.id2;
-		if (!visited[next_node]) {
+		if (!visited[next_node])
+		{
 			walk_(next_node, action);
 		}
 	}
@@ -20,4 +22,40 @@ std::ostream& operator<<(std::ostream& out, Graph<Vertex> graph)
 		out << std::endl << '[' << it->first << ']' << ':' << it->second;
 	}
 	return out;
+}
+
+template<typename Vertex, typename Distance>
+bool Graph<Vertex, Distance>::HasVertex(const Vertex& vertex) const
+{
+	return (vertex.count(vertex) != 0);
+};
+
+template<typename Vertex, typename Distance>
+bool Graph<Vertex, Distance>::AddVertex(const Vertex& v)
+{
+	if (!has_vertex(v))
+	{
+		std::map<Vertex, Edge<Vertex, Distance>> tmp;
+		mapV[v] = tmp;
+		return true;
+	}
+	return false;
+}
+
+template<typename Vertex, typename Distance>
+bool Graph<Vertex, Distance>::removeVertex(const Vertex& v)
+{
+	if (!HasVertex(v))
+	{
+		return false;
+	}
+	mapV.erase(v);
+	for (auto it = mapV.begin(); it != mapV.end(); it++)
+	{
+		if (it->second.count(v) != 0)
+		{
+			it->second.erase(v);
+		}
+	}
+	return true;
 }
