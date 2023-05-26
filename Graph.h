@@ -9,7 +9,7 @@ template<typename Vertex, typename Distance = double>
 class Graph
 {
  public:
-	template<typename tVertex, typename tDistance = double>
+	template<typename tVertex=Vertex, typename tDistance = Distance>
 
 	// Структура ребра
 	struct Edge
@@ -61,7 +61,7 @@ class Graph
 	};
 
 	std::map<Vertex, std::map<Vertex, Edge<Vertex, Distance>>> mapV;
-	std::map<Vertex, bool>visited;
+	std::map<Vertex, bool> visited;
 
 	//проверка-добавление-удаление вершин
 	bool HasVertex(const Vertex& vertex) const;
@@ -70,27 +70,27 @@ class Graph
 	std::vector<Vertex> vertices() const;
 
 	//проверка-добавление-удаление ребер
-	void add_edge(const Vertex& from, const Vertex& to,
+	bool addEdge(const Vertex& from, const Vertex& to,
 		const Distance& d);
-	bool remove_edge(const Vertex& from, const Vertex& to);
-	bool remove_edge(const Edge& e); //c учетом расстояния
-	bool has_edge(const Vertex& from, const Vertex& to) const;
-	bool has_edge(const Edge& e); //c учетом расстояния в Edge
+	bool removeEdge(const Vertex& from, const Vertex& to);
+	bool removeEdge(const Edge<Vertex, Distance>& edge); //c учетом расстояния
+	bool hasEdge(const Vertex& from, const Vertex& to) const;
+	bool hasEdge(const Edge<Vertex, Distance>& edge); //c учетом расстояния в Edge
 
 	//получение всех ребер, выходящих из вершины
-	std::vector<Edge> edges(const Vertex& vertex);
+	std::vector<Edge<Vertex, Distance>> edges(const Vertex& vertex);
 
 	size_t order() const; //порядок
 	size_t degree() const; //степень
 
 
 	//поиск кратчайшего пути
-	std::vector<Edge> shortest_path(const Vertex& from,
+	std::vector<Edge<Vertex, Distance>> shortest_path(const Vertex& from,
 		const Vertex& to) const;
 
 	//обход
 	void walk(const Vertex& start, std::function<void(const Vertex&)> action);
-	friend std::ostream& operator<< (std::ostream& out, Graph<Vertex>graph);
+	friend std::ostream& operator<<(std::ostream& out, Graph<Vertex> graph);
 };
 
 #endif //LAB3_CPP_4SEM__GRAPH_H_
