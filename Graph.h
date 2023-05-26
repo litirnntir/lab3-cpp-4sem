@@ -60,6 +60,10 @@ class Graph
 		}
 	};
 
+	// Для обхода
+	std::map<Vertex, std::map<int,Edge<Vertex>>> mapV;
+	std::map<Vertex, bool>visited;
+
 	//проверка-добавление-удаление вершин
 	bool has_vertex(const Vertex& v) const;
 	void add_vertex(const Vertex& v);
@@ -85,11 +89,9 @@ class Graph
 	std::vector<Edge> shortest_path(const Vertex& from,
 		const Vertex& to) const;
 
-	// Для обхода
-	std::map<Vertex, std::map<int,Edge<Vertex>>> mapV;
-	std::map<Vertex, bool>visited;
 	//обход
 	void walk(const Vertex& start, std::function<void(const Vertex&)> action);
+	friend std::ostream& operator<< (std::ostream& out, Graph<Vertex>graph);
 };
 
 #endif //LAB3_CPP_4SEM__GRAPH_H_

@@ -12,3 +12,12 @@ void Graph<Vertex, Distance>::walk(const Vertex& start, std::function<void(const
 		}
 	}
 }
+template<typename Vertex, typename Distance>
+std::ostream& operator<<(std::ostream& out, Graph<Vertex> graph)
+{
+	for (auto it = graph.mapV.begin(); it != graph.mapV.end(); ++it)
+	{
+		out << std::endl << '[' << it->first << ']' << ':' << it->second;
+	}
+	return out;
+}
