@@ -152,3 +152,25 @@ std::vector<Edge<Vertex, Distance>> Graph<Vertex, Distance>::edges(const Vertex&
 	}
 	return edgesMap;
 }
+
+template<typename Vertex, typename Distance>
+size_t Graph<Vertex, Distance>::degree() const
+{
+	int maxSize = -1;
+	for (auto it = mapV.begin(); it != mapV.end(); it++)
+	{
+		std::vector<Edge<Vertex, Distance>> edgesTmp = edges(it->first);
+		int size = edgesTmp.size();
+		if (size > maxSize)
+		{
+			maxSize = size;
+		}
+	}
+	return maxSize;
+}
+
+template<typename Vertex, typename Distance>
+size_t Graph<Vertex, Distance>::order() const
+{
+	return mapV.size();
+}
