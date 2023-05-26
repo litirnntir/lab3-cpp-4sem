@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <map>
-
+#include <utility>
 
 template<typename Vertex, typename Distance = double>
 class Graph
@@ -17,8 +17,10 @@ class Graph
 		tVertex from;
 		tVertex to;
 		tDistance distance;
-		Edge(tVertex id1 = 0, tVertex id2 = 0, tDistance distance = 0) : from(id1), to(id2), distance(distance) {}
-		friend std::ostream& operator<< (std::ostream& out, const std::map<int, Edge<tVertex>>& map)
+		Edge(tVertex from = 0, tVertex to = 0, tDistance distance = 0) : from(from), to(to), distance(distance)
+		{
+		}
+		friend std::ostream& operator<<(std::ostream& out, const std::map<int, Edge<tVertex>>& map)
 		{
 			for (auto it = map.begin(); it != map.end(); ++it)
 			{
@@ -26,9 +28,34 @@ class Graph
 			}
 			return out;
 		}
-		friend std::ostream& operator<< (std::ostream& out, const Edge<tVertex>& edge)
+		friend std::ostream& operator<<(std::ostream& out, const Edge<tVertex>& edge)
 		{
 			out << "->(" << edge.from << ", " << edge.to << "; " << edge.distance << ")";
+			return out;
+		}
+	};
+	// Шаблон для строк
+	template<>
+	struct Edge<std::string, double>
+	{
+		std::string from;
+		std::string to;
+		double distance;
+		Edge(std::string from = "", std::string to = "", double distance_ = 0)
+			: from(std::move(from)), to(std::move(to)), distance(distance_)
+		{
+		}
+		friend std::ostream& operator<<(std::ostream& out, const Edge<std::string>& edge)
+		{
+			out << "->(" << edge.from << ", " << edge.to << "; " << edge.distance << ")";
+			return out;
+		}
+		friend std::ostream& operator<<(std::ostream& out, const std::map<int, Edge<std::string>>& map)
+		{
+			for (auto it = map.begin(); it != map.end(); ++it)
+			{
+				out << it->second;
+			}
 			return out;
 		}
 	};
