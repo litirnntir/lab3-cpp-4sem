@@ -5,60 +5,61 @@
 #include <map>
 #include <utility>
 
+template<typename tVertex, typename tDistance = double>
+
+// Структура ребра
+struct Edge
+{
+	tVertex from;
+	tVertex to;
+	tDistance distance;
+	Edge(tVertex from = 0, tVertex to = 0, tDistance distance = 0) : from(from), to(to), distance(distance)
+	{
+	}
+	friend std::ostream& operator<<(std::ostream& out, const std::map<int, Edge<tVertex>>& map)
+	{
+		for (auto it = map.begin(); it != map.end(); ++it)
+		{
+			out << it->second;
+		}
+		return out;
+	}
+	friend std::ostream& operator<<(std::ostream& out, const Edge<tVertex>& edge)
+	{
+		out << "->(" << edge.from << ", " << edge.to << "; " << edge.distance << ")";
+		return out;
+	}
+};
+// Шаблон для строк
+template<>
+struct Edge<std::string, double>
+{
+	std::string from;
+	std::string to;
+	double distance;
+	Edge(std::string from = "", std::string to = "", double distance_ = 0)
+		: from(std::move(from)), to(std::move(to)), distance(distance_)
+	{
+	}
+	friend std::ostream& operator<<(std::ostream& out, const Edge<std::string>& edge)
+	{
+		out << "->(" << edge.from << ", " << edge.to << "; " << edge.distance << ")";
+		return out;
+	}
+	friend std::ostream& operator<<(std::ostream& out, const std::map<int, Edge<std::string>>& map)
+	{
+		for (auto it = map.begin(); it != map.end(); ++it)
+		{
+			out << it->second;
+		}
+		return out;
+	}
+};
+
 template<typename Vertex, typename Distance = double>
 class Graph
 {
  public:
-	template<typename tVertex=Vertex, typename tDistance = Distance>
-
-	// Структура ребра
-	struct Edge
-	{
-		tVertex from;
-		tVertex to;
-		tDistance distance;
-		Edge(tVertex from = 0, tVertex to = 0, tDistance distance = 0) : from(from), to(to), distance(distance)
-		{
-		}
-		friend std::ostream& operator<<(std::ostream& out, const std::map<int, Edge<tVertex>>& map)
-		{
-			for (auto it = map.begin(); it != map.end(); ++it)
-			{
-				out << it->second;
-			}
-			return out;
-		}
-		friend std::ostream& operator<<(std::ostream& out, const Edge<tVertex>& edge)
-		{
-			out << "->(" << edge.from << ", " << edge.to << "; " << edge.distance << ")";
-			return out;
-		}
-	};
-	// Шаблон для строк
-	template<>
-	struct Edge<std::string, double>
-	{
-		std::string from;
-		std::string to;
-		double distance;
-		Edge(std::string from = "", std::string to = "", double distance_ = 0)
-			: from(std::move(from)), to(std::move(to)), distance(distance_)
-		{
-		}
-		friend std::ostream& operator<<(std::ostream& out, const Edge<std::string>& edge)
-		{
-			out << "->(" << edge.from << ", " << edge.to << "; " << edge.distance << ")";
-			return out;
-		}
-		friend std::ostream& operator<<(std::ostream& out, const std::map<int, Edge<std::string>>& map)
-		{
-			for (auto it = map.begin(); it != map.end(); ++it)
-			{
-				out << it->second;
-			}
-			return out;
-		}
-	};
 
 	std::map<Vertex, std::map<Vertex, Edge<Vertex, Distance>>> mapV;
 	std::map<Vertex, bool> visited;

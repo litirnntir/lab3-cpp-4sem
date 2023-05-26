@@ -101,7 +101,7 @@ bool Graph<Vertex, Distance>::removeEdge(const Vertex& from, const Vertex& to)
 }
 
 template<typename Vertex, typename Distance>
-bool Graph<Vertex, Distance>::removeEdge(const Graph::Edge<Vertex, Distance>& edge)
+bool Graph<Vertex, Distance>::removeEdge(const Edge<Vertex, Distance>& edge)
 {
 	if (has_edge(edge))
 	{
@@ -123,7 +123,7 @@ bool Graph<Vertex, Distance>::hasEdge(const Vertex& from, const Vertex& to) cons
 	return false;
 }
 template<typename Vertex, typename Distance>
-bool Graph<Vertex, Distance>::hasEdge(const Graph::Edge<Vertex, Distance>& edge)
+bool Graph<Vertex, Distance>::hasEdge(const Edge<Vertex, Distance>& edge)
 {
 	if (has_vertex(edge.from) && has_vertex(edge.to))
 	{
@@ -136,4 +136,19 @@ bool Graph<Vertex, Distance>::hasEdge(const Graph::Edge<Vertex, Distance>& edge)
 		}
 	}
 	return false;
+}
+
+template<typename Vertex, typename Distance>
+std::vector<Edge<Vertex, Distance>> Graph<Vertex, Distance>::edges(const Vertex& vertex)
+{
+	std::vector<Edge<Vertex, Distance>> edgesMap;
+	if (has_vertex(vertex))
+	{
+		for (auto i = mapV[vertex].begin(); i != mapV[vertex].end(); i++)
+		{
+			edgesMap.push_back(i->second);
+		}
+		return edgesMap;
+	}
+	return edgesMap;
 }
