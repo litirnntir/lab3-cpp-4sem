@@ -227,10 +227,8 @@ std::vector<Vertex> Graph<Vertex, Distance>::shortestPath(const Vertex& from, co
 template<typename Vertex, typename Distance>
 Vertex Graph<Vertex, Distance>::findOptimal()
 {
-	// Инициализируем константу INF
 	const Distance INF = std::numeric_limits<Distance>::max();
 
-	// Создаем копию графа для вычисления расстояний
 	std::map<Vertex, std::map<Vertex, Distance>> dist;
 	for (auto&[v1, edges] : mapV)
 	{
@@ -240,13 +238,11 @@ Vertex Graph<Vertex, Distance>::findOptimal()
 		}
 	}
 
-	// Инициализируем диагональные элементы расстояний нулями
 	for (auto&[k, _] : dist)
 	{
 		dist[k][k] = 0;
 	}
 
-	// Применяем алгоритм Флойда-Уоршелла для вычисления кратчайших расстояний между всеми вершинами
 	for (auto&[k, _] : dist)
 	{
 		for (auto&[i, _] : dist)
@@ -261,7 +257,6 @@ Vertex Graph<Vertex, Distance>::findOptimal()
 		}
 	}
 
-	// Находим вершину с наименьшим максимальным расстоянием до других вершин
 	Distance ans = INF;
 	Vertex res;
 	for (auto&[v, d] : dist)
@@ -278,7 +273,6 @@ Vertex Graph<Vertex, Distance>::findOptimal()
 		}
 	}
 
-	// Возвращаем результат
 	return res;
 }
 
