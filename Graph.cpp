@@ -223,11 +223,6 @@ std::vector<Vertex> Graph<Vertex, Distance>::shortestPath(const Vertex& from, co
 	std::reverse(path.begin(), path.end());
 	return path;
 }
-//template<typename Vertex, typename Distance>
-//Vertex Graph<Vertex, Distance>::findOptimal()
-//{
-//	return nullptr;
-//}
 
 template<typename Vertex, typename Distance>
 Vertex Graph<Vertex, Distance>::findOptimal()
