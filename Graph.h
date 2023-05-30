@@ -67,8 +67,8 @@ class Graph
 	std::map<Vertex, bool> visited;
 
 	//проверка-добавление-удаление вершин
-	bool HasVertex(const Vertex& vertex) const;
-	bool AddVertex(const Vertex& v);
+	bool hasVertex(const Vertex& v) const;
+	bool addVertex(const Vertex& v);
 	bool removeVertex(const Vertex& v);
 	std::vector<Vertex> vertices() const;
 
@@ -88,11 +88,12 @@ class Graph
 
 
 	//поиск кратчайшего пути
-	std::vector<Edge<Vertex, Distance>> shortestPath(const Vertex& from,
-		const Vertex& to) const;
+	std::vector<Vertex> shortestPath(const Vertex& from,
+		const Vertex& to);
 
 	//обход
 	void walk(const Vertex& start, std::function<void(const Vertex&)> action);
+
 	friend std::ostream& operator<<(std::ostream& out, Graph<Vertex> graph);
 
 	//задача

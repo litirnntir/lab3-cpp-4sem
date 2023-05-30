@@ -25,15 +25,19 @@ std::ostream& operator<<(std::ostream& out, Graph<Vertex> graph)
 }
 
 template<typename Vertex, typename Distance>
-bool Graph<Vertex, Distance>::HasVertex(const Vertex& vertex) const
+bool Graph<Vertex, Distance>::hasVertex(const Vertex& v) const
 {
-	return (vertex.count(vertex) != 0);
-};
+	for (const auto& vert : mapV)
+	{
+		if (v == vert.first) return true;
+	}
+	return false;
+}
 
 template<typename Vertex, typename Distance>
-bool Graph<Vertex, Distance>::AddVertex(const Vertex& v)
+bool Graph<Vertex, Distance>::addVertex(const Vertex& v)
 {
-	if (!has_vertex(v))
+	if (!hasVertex(v))
 	{
 		std::map<Vertex, Edge<Vertex, Distance>> tmp;
 		mapV[v] = tmp;
@@ -45,7 +49,7 @@ bool Graph<Vertex, Distance>::AddVertex(const Vertex& v)
 template<typename Vertex, typename Distance>
 bool Graph<Vertex, Distance>::removeVertex(const Vertex& v)
 {
-	if (!HasVertex(v))
+	if (!hasVertex(v))
 	{
 		return false;
 	}
@@ -74,10 +78,10 @@ std::vector<Vertex> Graph<Vertex, Distance>::vertices() const
 template<typename Vertex, typename Distance>
 bool Graph<Vertex, Distance>::addEdge(const Vertex& from, const Vertex& to, const Distance& d)
 {
-	if (has_vertex(from) && has_vertex(to))
+	if (hasVertex(from) && hasVertex(to))
 	{
 		Edge<Vertex, Distance> tmp(from, to, d);
-		if (!has_edge(tmp))
+		if (!hasEdge(tmp))
 		{
 			mapV[from][to] = tmp;
 			return true;
@@ -91,7 +95,7 @@ template<typename Vertex, typename Distance>
 bool Graph<Vertex, Distance>::removeEdge(const Vertex& from, const Vertex& to)
 {
 	{
-		if (has_edge(from, to))
+		if (hasEdge(from, to))
 		{
 			mapV[from].erase(to);
 			return true;
@@ -103,7 +107,7 @@ bool Graph<Vertex, Distance>::removeEdge(const Vertex& from, const Vertex& to)
 template<typename Vertex, typename Distance>
 bool Graph<Vertex, Distance>::removeEdge(const Edge<Vertex, Distance>& edge)
 {
-	if (has_edge(edge))
+	if (hasEdge(edge))
 	{
 		mapV[edge.from].erase(edge.to);
 	}
@@ -113,7 +117,7 @@ bool Graph<Vertex, Distance>::removeEdge(const Edge<Vertex, Distance>& edge)
 template<typename Vertex, typename Distance>
 bool Graph<Vertex, Distance>::hasEdge(const Vertex& from, const Vertex& to) const
 {
-	if (has_vertex(from) && has_vertex(to))
+	if (hasVertex(from) && hasVertex(to))
 	{
 		if (mapV[from].count(to) != 0)//graph[from].find(to) != graph[from].end()
 		{
@@ -125,7 +129,7 @@ bool Graph<Vertex, Distance>::hasEdge(const Vertex& from, const Vertex& to) cons
 template<typename Vertex, typename Distance>
 bool Graph<Vertex, Distance>::hasEdge(const Edge<Vertex, Distance>& edge)
 {
-	if (has_vertex(edge.from) && has_vertex(edge.to))
+	if (hasVertex(edge.from) && hasVertex(edge.to))
 	{
 		if (mapV[edge.from].find(edge.to) != mapV[edge.from].end())
 		{
@@ -142,7 +146,7 @@ template<typename Vertex, typename Distance>
 std::vector<Edge<Vertex, Distance>> Graph<Vertex, Distance>::edges(const Vertex& vertex)
 {
 	std::vector<Edge<Vertex, Distance>> edgesMap;
-	if (has_vertex(vertex))
+	if (hasVertex(vertex))
 	{
 		for (auto i = mapV[vertex].begin(); i != mapV[vertex].end(); i++)
 		{
@@ -176,7 +180,7 @@ size_t Graph<Vertex, Distance>::order() const
 }
 
 template<typename Vertex, typename Distance>
-std::vector<Edge<Vertex, Distance>> Graph<Vertex, Distance>::shortestPath(const Vertex& from, const Vertex& to) const
+std::vector<Vertex> Graph<Vertex, Distance>::shortestPath(const Vertex& from, const Vertex& to)
 {
 	std::map<Vertex, Distance> distances;
 	std::map<Vertex, Vertex> prev;
@@ -199,12 +203,12 @@ std::vector<Edge<Vertex, Distance>> Graph<Vertex, Distance>::shortestPath(const 
 		for (auto i : edges(vertex))
 		{
 			double newD;
-			newD = dist + i.dist;
+			newD = dist + i.distance;
 			if (newD < distances[i.to])
 			{
 				distances[i.to] = newD;
 				prev[i.to] = vertex;
-				pq.push(make_pair(newD, i.to));
+				pq.push(std::make_pair(newD, i.to));
 			}
 		}
 	}
@@ -219,47 +223,68 @@ std::vector<Edge<Vertex, Distance>> Graph<Vertex, Distance>::shortestPath(const 
 	std::reverse(path.begin(), path.end());
 	return path;
 }
+//template<typename Vertex, typename Distance>
+//Vertex Graph<Vertex, Distance>::findOptimal()
+//{
+//	return nullptr;
+//}
+
 template<typename Vertex, typename Distance>
 Vertex Graph<Vertex, Distance>::findOptimal()
 {
-	std::map<Vertex, Distance> mapOfDistance;
-	for (auto it1 = mapV.begin(); it1 != mapV.end(); it1++)
+	// Инициализируем константу INF
+	const Distance INF = std::numeric_limits<Distance>::max();
+
+	// Создаем копию графа для вычисления расстояний
+	std::map<Vertex, std::map<Vertex, Distance>> dist;
+	for (auto&[v1, edges] : mapV)
 	{
-		int infCount = 0;
-		int okCount = mapV.size() / 4;
-		Distance sum = 0;
-		for (auto it2 = mapV.begin(); it2 != mapV.end(); it2++)
+		for (auto&[v2, edge] : edges)
 		{
-			if (it1 == it2)
-			{
-				continue;
-			}
-			std::vector<Edge<Vertex, Distance>> tmp = shortestPath(it1->first, it2->first);
-			if (tmp.size() == 0)
-			{
-				mapOfDistance[it1->first] = std::numeric_limits<Distance>::max();
-				break;
-			}
-			for (auto i : tmp)
-			{
-				sum += i.dist;
-			}
-		}
-		if (mapOfDistance[it1->first] != std::numeric_limits<Distance>::max())
-		{
-			mapOfDistance[it1->first] = sum;
+			dist[v1][v2] = edge.distance;
 		}
 	}
-	Vertex vertexWithMinDist;
-	Distance minDist = std::numeric_limits<Distance>::max();
-	for (auto it = mapOfDistance.begin(); it != mapOfDistance.end(); it++)
+
+	// Инициализируем диагональные элементы расстояний нулями
+	for (auto&[k, _] : dist)
 	{
-		Distance dist = it->second;
-		if (dist < minDist)
+		dist[k][k] = 0;
+	}
+
+	// Применяем алгоритм Флойда-Уоршелла для вычисления кратчайших расстояний между всеми вершинами
+	for (auto&[k, _] : dist)
+	{
+		for (auto&[i, _] : dist)
 		{
-			minDist = dist;
-			vertexWithMinDist = it->first;
+			for (auto&[j, _] : dist)
+			{
+				if (dist[i][k] != INF && dist[k][j] != INF)
+				{
+					dist[i][j] = std::min(dist[i][j], dist[i][k] + dist[k][j]);
+				}
+			}
 		}
 	}
-	return vertexWithMinDist;
+
+	// Находим вершину с наименьшим максимальным расстоянием до других вершин
+	Distance ans = INF;
+	Vertex res;
+	for (auto&[v, d] : dist)
+	{
+		Distance maxDist = 0;
+		for (auto&[_, dist] : d)
+		{
+			maxDist = std::max(maxDist, dist);
+		}
+		if (maxDist < ans)
+		{
+			ans = maxDist;
+			res = v;
+		}
+	}
+
+	// Возвращаем результат
+	return res;
 }
+
+
