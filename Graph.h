@@ -94,7 +94,19 @@ class Graph
 	//обход
 	void walk(const Vertex& start, std::function<void(const Vertex&)> action);
 
-	friend std::ostream& operator<<(std::ostream& out, Graph<Vertex> graph);
+	friend std::ostream& operator<<(std::ostream& os, Graph<Vertex, Distance>& obj)
+	{
+		for (auto it1 = obj.mapV.begin(); it1 != obj.mapV.end(); it1++)
+		{
+			os << it1->first << ": ";
+			for (auto it2 = it1->second.begin(); it2 != it1->second.end(); it2++)
+			{
+				os << it2->second;
+			}
+			os << "\n";
+		}
+		return os;
+	}
 
 	//задача
 	Vertex findOptimal();
