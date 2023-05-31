@@ -66,13 +66,14 @@ class Graph
 	std::map<Vertex, std::map<Vertex, Edge<Vertex, Distance>>> mapV;
 	std::map<Vertex, bool> visited;
 
-	//проверка-добавление-удаление вершин
+	// Проверка-добавление-удаление вершин
 	bool hasVertex(const Vertex& v) const;
 	bool addVertex(const Vertex& v);
 	bool removeVertex(const Vertex& v);
+	void init();
 	std::vector<Vertex> vertices() const;
 
-	//проверка-добавление-удаление ребер
+	// Проверка-добавление-удаление ребер
 	bool addEdge(const Vertex& from, const Vertex& to,
 		const Distance& d);
 	bool removeEdge(const Vertex& from, const Vertex& to);
@@ -80,25 +81,26 @@ class Graph
 	bool hasEdge(const Vertex& from, const Vertex& to) const;
 	bool hasEdge(const Edge<Vertex, Distance>& edge); //c учетом расстояния в Edge
 
-	//получение всех ребер, выходящих из вершины
+	// Получение всех ребер, выходящих из вершины
 	std::vector<Edge<Vertex, Distance>> edges(const Vertex& vertex);
 
 	size_t order() const; //порядок
 	size_t degree() const; //степень
 
 
-	//поиск кратчайшего пути
+	// Поиск кратчайшего пути
 	std::vector<Vertex> shortestPath(const Vertex& from,
 		const Vertex& to);
 
-	//обход
-	void walk(const Vertex& start, std::function<void(const Vertex&)> action);
+	// Обход
+	void walk(const Vertex& startVertex, std::function<void(const Vertex&)> action);
+	void walk_(const Vertex& startVertex, std::function<void(const Vertex&)> action);
 
 	friend std::ostream& operator<<(std::ostream& os, Graph<Vertex, Distance>& obj)
 	{
 		for (auto it1 = obj.mapV.begin(); it1 != obj.mapV.end(); it1++)
 		{
-			os << it1->first << ": ";
+			os << it1->first << "|";
 			for (auto it2 = it1->second.begin(); it2 != it1->second.end(); it2++)
 			{
 				os << it2->second;
@@ -108,7 +110,7 @@ class Graph
 		return os;
 	}
 
-	//задача
+	// Задача
 	Vertex findOptimal();
 };
 

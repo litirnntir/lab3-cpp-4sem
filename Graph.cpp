@@ -1,11 +1,28 @@
 #include "Graph.h"
 
 template<typename Vertex, typename Distance>
-void Graph<Vertex, Distance>::walk(const Vertex& start, std::function<void(const Vertex&)> action)
+std::vector<Vertex> Graph<Vertex, Distance>::vertices() const
 {
-	visited[start] = true;
-	action(start);
-	for (auto it1 : edges(start))
+	std::vector<Vertex> vertexMap;
+	for (auto i = mapV.begin(); i != mapV.end(); i++)
+	{
+		vertexMap.push_back(i->first);
+	}
+	return vertexMap;
+}
+
+template<typename Vertex, typename Distance = double>
+void Print(const Vertex& val)
+{
+	std::cout << val << ' ';
+}
+
+template<typename Vertex, typename Distance>
+void Graph<Vertex, Distance>::walk_(const Vertex& startVertex, std::function<void(const Vertex&)> action)
+{
+	visited[startVertex] = true;
+	action(startVertex);
+	for (auto it1 : edges(startVertex))
 	{
 		Vertex next_node = it1.to;
 		if (!visited[next_node])
@@ -13,6 +30,31 @@ void Graph<Vertex, Distance>::walk(const Vertex& start, std::function<void(const
 			walk_(next_node, action);
 		}
 	}
+
+}
+
+template<typename Vertex, typename Distance>
+void Graph<Vertex, Distance>::init()
+{
+	for (auto i : vertices())
+	{
+		visited[i] = false;
+	}
+}
+
+template<typename Vertex, typename Distance>
+void Graph<Vertex, Distance>::walk(const Vertex& startVertex, std::function<void(const Vertex&)> action)
+{
+	init();
+	walk_(startVertex, action);
+	for (auto& node : visited)
+	{
+		if (!node.second)
+		{
+			walk_(node.first, action);
+		}
+	}
+
 }
 
 template<typename Vertex, typename Distance>
@@ -53,17 +95,6 @@ bool Graph<Vertex, Distance>::removeVertex(const Vertex& v)
 		}
 	}
 	return true;
-}
-
-template<typename Vertex, typename Distance>
-std::vector<Vertex> Graph<Vertex, Distance>::vertices() const
-{
-	std::vector<Vertex> vertexMap;
-	for (auto i = mapV.begin(); i != mapV.end(); i++)
-	{
-		vertexMap.push_back(i->first);
-	}
-	return vertexMap;
 }
 
 template<typename Vertex, typename Distance>
