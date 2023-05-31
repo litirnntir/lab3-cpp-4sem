@@ -259,53 +259,38 @@ std::vector<Vertex> Graph<Vertex, Distance>::shortestPath(const Vertex& from, co
 template<typename Vertex, typename Distance>
 Vertex Graph<Vertex, Distance>::findOptimal()
 {
-	const Distance INF = std::numeric_limits<Distance>::max();
-
-	std::map<Vertex, std::map<Vertex, Distance>> dist;
-	for (auto&[v1, edges] : mapV)
+	std::map<Vertex, Distance> maxes;
+	Vertex id;
+	Distance min;
+	for (auto i : vertices())
 	{
-		for (auto&[v2, edge] : edges)
+		Distance max;
+		for (auto j : vertices())
 		{
-			dist[v1][v2] = edge.distance;
-		}
-	}
-
-	for (auto&[k, _] : dist)
-	{
-		dist[k][k] = 0;
-	}
-
-	for (auto&[k, _] : dist)
-	{
-		for (auto&[i, _] : dist)
-		{
-			for (auto&[j, _] : dist)
+			if (i == j) continue;
+			else
 			{
-				if (dist[i][k] != INF && dist[k][j] != INF)
+				Distance sum = 0;
+				std::vector<Vertex> path = shortestPath(j, i);
+				for (auto k = path.begin(); k < path.end() - 1; k++)
 				{
-					dist[i][j] = std::min(dist[i][j], dist[i][k] + dist[k][j]);
+					sum = sum + mapV[*k][*(k + 1)].distance;
 				}
+				if (sum > max || !max) max = sum;
 			}
 		}
+		maxes.insert(std::make_pair(i, max));
+		min = maxes[i];
 	}
-
-	Distance ans = INF;
-	Vertex res;
-	for (auto&[v, d] : dist)
+	for (auto i : vertices())
 	{
-		Distance maxDist = 0;
-		for (auto&[_, distance] : d)
+		if (maxes[i] < min)
 		{
-			maxDist = std::max(maxDist, distance);
-		}
-		if (maxDist < ans)
-		{
-			ans = maxDist;
-			res = v;
+			min = maxes[i];
+			id = i;
 		}
 	}
-
-	return res;
+	return id;
 }
 
 
