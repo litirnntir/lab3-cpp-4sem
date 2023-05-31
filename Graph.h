@@ -78,8 +78,8 @@ class Graph
 		const Distance& d);
 	bool removeEdge(const Vertex& from, const Vertex& to);
 	bool removeEdge(const Edge<Vertex, Distance>& edge); //c учетом расстояния
-	bool hasEdge(const Vertex& from, const Vertex& to) const;
-	bool hasEdge(const Edge<Vertex, Distance>& edge); //c учетом расстояния в Edge
+	bool hasEdge(const Vertex& from, const Vertex& to);
+	bool hasEdge(const Edge<Vertex>& e); //c учетом расстояния в Edge
 
 	// Получение всех ребер, выходящих из вершины
 	std::vector<Edge<Vertex, Distance>> edges(const Vertex& vertex);

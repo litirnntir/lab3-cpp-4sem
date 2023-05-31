@@ -14,7 +14,7 @@ std::vector<Vertex> Graph<Vertex, Distance>::vertices() const
 template<typename Vertex, typename Distance = double>
 void Print(const Vertex& val)
 {
-	std::cout << val << ' ';
+	std::cout << val << '|';
 }
 
 template<typename Vertex, typename Distance>
@@ -137,28 +137,26 @@ bool Graph<Vertex, Distance>::removeEdge(const Edge<Vertex, Distance>& edge)
 }
 
 template<typename Vertex, typename Distance>
-bool Graph<Vertex, Distance>::hasEdge(const Vertex& from, const Vertex& to) const
+bool Graph<Vertex, Distance>::hasEdge(const Vertex& from, const Vertex& to)
 {
 	if (hasVertex(from) && hasVertex(to))
 	{
-		if (mapV[from].count(to) != 0)//graph[from].find(to) != graph[from].end()
+		for (auto it : edges(from))
 		{
-			return true;
+			if (it.to == to) return true;
 		}
 	}
 	return false;
 }
+
 template<typename Vertex, typename Distance>
-bool Graph<Vertex, Distance>::hasEdge(const Edge<Vertex, Distance>& edge)
+bool Graph<Vertex, Distance>::hasEdge(const Edge<Vertex>& e)
 {
-	if (hasVertex(edge.from) && hasVertex(edge.to))
+	if (hasVertex(e.from) && hasVertex(e.to))
 	{
-		if (mapV[edge.from].find(edge.to) != mapV[edge.from].end())
+		for (auto it : edges(e.from))
 		{
-			if (mapV[edge.from][edge.to].distance == edge.distance)
-			{
-				return true;
-			}
+			if (it.to == e.to && it.distance == e.distance) return true;
 		}
 	}
 	return false;
@@ -284,9 +282,9 @@ Vertex Graph<Vertex, Distance>::findOptimal()
 	for (auto&[v, d] : dist)
 	{
 		Distance maxDist = 0;
-		for (auto&[_, dist] : d)
+		for (auto&[_, distance] : d)
 		{
-			maxDist = std::max(maxDist, dist);
+			maxDist = std::max(maxDist, distance);
 		}
 		if (maxDist < ans)
 		{
