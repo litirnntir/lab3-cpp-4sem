@@ -4,7 +4,7 @@
 
 #### *Task No. 1:*
 
-####Implement a template class that models an oriented graph
+Implement a template class that models an oriented graph
 
 Methods for traversing a graph and finding the shortest:
 
