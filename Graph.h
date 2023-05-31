@@ -32,6 +32,7 @@ struct Edge
 		return out;
 	}
 };
+
 // Шаблон для строк
 template<>
 struct Edge<std::string, double>
@@ -50,9 +51,9 @@ struct Edge<std::string, double>
 	}
 	friend std::ostream& operator<<(std::ostream& out, const std::map<int, Edge<std::string>>& map)
 	{
-		for (auto it = map.begin(); it != map.end(); ++it)
+		for (const auto& it : map)
 		{
-			out << it->second;
+			out << it.second;
 		}
 		return out;
 	}

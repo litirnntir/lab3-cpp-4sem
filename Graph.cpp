@@ -202,36 +202,48 @@ size_t Graph<Vertex, Distance>::order() const
 template<typename Vertex, typename Distance>
 std::vector<Vertex> Graph<Vertex, Distance>::shortestPath(const Vertex& from, const Vertex& to)
 {
-	std::map<Vertex, Distance> distances;
-	std::map<Vertex, Vertex> prev;
-	for (auto i : vertices())
+	if (!hasVertex(from) || !hasVertex(to))
 	{
-		distances[i] = INT_MAX;
+		std::vector<Vertex> a;
+		return a;
 	}
-	std::queue<std::pair<Distance, Vertex>> pq;
-	distances[from] = 0;
-	pq.push({ 0, from });
-	while (!pq.empty())
+	std::map<Vertex, Distance> dist;
+	std::map<Vertex, Vertex> prev;
+
+	for (auto& vertex : mapV)
 	{
-		Distance dist = pq.front().first;
-		Vertex vertex = pq.front().second;
-		pq.pop();
-		if (dist > distances[vertex])
+		dist[vertex.first] = std::numeric_limits<Distance>::max();
+	}
+	dist[from] = 0;
+
+	for (int i = 0; i < mapV.size() - 1; i++)
+	{
+		for (auto& vertex : mapV)
 		{
-			continue;
-		}
-		for (auto i : edges(vertex))
-		{
-			double newD;
-			newD = dist + i.distance;
-			if (newD < distances[i.to])
+			for (auto& edge : vertex.second)
 			{
-				distances[i.to] = newD;
-				prev[i.to] = vertex;
-				pq.push(std::make_pair(newD, i.to));
+				if (dist[vertex.first] != std::numeric_limits<Distance>::max()
+					&& dist[vertex.first] + edge.second.distance < dist[edge.second.to])
+				{
+					dist[edge.second.to] = dist[vertex.first] + edge.second.distance;
+					prev[edge.second.to] = vertex.first;
+				}
 			}
 		}
 	}
+
+	for (auto& vertex : mapV)
+	{
+		for (auto& edge : vertex.second)
+		{
+			if (dist[vertex.first] != std::numeric_limits<Distance>::max()
+				&& dist[vertex.first] + edge.second.distance < dist[edge.second.to])
+			{
+				throw std::runtime_error("Negative cycle detected");
+			}
+		}
+	}
+
 	std::vector<Vertex> path;
 	Vertex current = to;
 	while (current != from)
