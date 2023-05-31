@@ -1,6 +1,6 @@
 ## *Laboratory work No. 3*
 
-### Variant No. 2 Gorbuntsova A. 6212
+### Variant No. 8 Gorbuntsova A. 6212
 
 #### *Task No. 1:*
 
@@ -9,7 +9,7 @@ Implement a template class that models an oriented graph
 Methods for traversing a graph and finding the shortest:
 
 traversing a graph - DFS\
-DFS finding the shortest - Bellman Ford
+DFS finding the shortest - Dijkstra's
 
 #### *Task No. 2:*
 
