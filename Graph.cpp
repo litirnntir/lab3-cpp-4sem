@@ -1,4 +1,5 @@
 #include "Graph.h"
+#include "unordered_map"
 
 template<typename Vertex, typename Distance>
 std::vector<Vertex> Graph<Vertex, Distance>::vertices() const

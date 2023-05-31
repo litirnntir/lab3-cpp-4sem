@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <queue>
+#include <unordered_map>
 
 template<typename tVertex, typename tDistance = double>
 
