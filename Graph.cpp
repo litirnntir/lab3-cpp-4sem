@@ -203,10 +203,10 @@ size_t Graph<Vertex, Distance>::order() const
 template<typename Vertex, typename Distance>
 std::vector<Vertex> Graph<Vertex, Distance>::shortestPath(const Vertex& from, const Vertex& to)
 {
+	std::vector<Vertex> path;
 	if (!hasVertex(from) || !hasVertex(to))
 	{
-		std::vector<Vertex> a;
-		return a;
+		return path;
 	}
 	std::map<Vertex, Distance> dist;
 	std::map<Vertex, Vertex> prev;
@@ -245,7 +245,6 @@ std::vector<Vertex> Graph<Vertex, Distance>::shortestPath(const Vertex& from, co
 		}
 	}
 
-	std::vector<Vertex> path;
 	Vertex current = to;
 	while (current != from)
 	{
